@@ -29,26 +29,54 @@ import java.util.List;
 
 public class CombinationSum {
 
-    private static List<List<Integer>> result = new ArrayList<>();
-
     public static void main(String[] args) {
-        List<List<Integer>> r = combinationSum(new int[] { 2, 3, 6, 7 }, 7);
-        for (List<Integer> c : r) {
-            printArr(c);
-        }
+
+        List<List<Integer>> result = combinationSum(new int[] { 2, 3, 6, 7 }, 7);
+        printResult(result);
+
     }
 
-    private static List<List<Integer>> combinationSum(int[] candidates, int target) {
+    public static List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> reslut = new ArrayList<>();
 
-        return result;
+        backtrack(candidates, target, 0, new ArrayList<>(), reslut);
+
+        return reslut;
+
     }
 
-    private static void printArr(List<Integer> sub) {
+    private static void backtrack(int[] candidates, int target, int index, List<Integer> comb,
+            List<List<Integer>> result) {
 
-        for (int n : sub) {
-            System.out.print(n + " ");
+        if (target == 0) {
+            result.add(new ArrayList<>(comb));
+            return;
         }
-        System.out.println("\n-----------------\n");
+
+        if (target < 0 || index == candidates.length) {
+            return;
+        }
+
+        // PICK the current candidate in the combination
+        comb.add(candidates[index]);
+        backtrack(candidates, target - candidates[index], index, comb, result);
+
+        // Backtrack to try other combinations
+        comb.remove(comb.size() - 1);
+
+        // Skip the current candidate and move to the next one
+        backtrack(candidates, target, index + 1, comb, result);
+
+    }
+
+    private static void printResult(List<List<Integer>> result) {
+
+        for (List<Integer> comb : result) {
+            for (int n : comb) {
+                System.out.print(n + " ");
+            }
+            System.out.println();
+        }
     }
 
 }
